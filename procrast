@@ -5,7 +5,7 @@ create_host_line() {
 }
 
 print_usage() {
-  echo "Usage: [sudo] $(basename $0) [no|yes|add|remove|list]"
+  echo "Usage: [sudo] $(basename $0) [no|yes|add|remove|list|dns_reload]"
 }
 
 set_procrast_no() {
@@ -41,6 +41,10 @@ list() {
   cat /etc/hosts | grep "# procrast" | cut -d" " -f2
 }
 
+dns_reload() {
+  killall mDNSResponder
+}
+
 if [[ $(/usr/bin/id -u) -ne 0 ]]; then
   sudo $0 $*
   exit
@@ -64,6 +68,9 @@ case $COMMAND in
   ;;
 'list')
   list
+  ;;
+'dns_reload')
+  dns_reload
   ;;
 *)
   print_usage
