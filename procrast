@@ -45,13 +45,16 @@ dns_reload() {
   killall mDNSResponder
 }
 
-if [[ $(/usr/bin/id -u) -ne 0 ]]; then
-  sudo $0 $*
-  exit
-fi
-
 COMMAND=$1
-shift
+
+# Raise to sudo privileges for options requiring that
+if [[ $COMMAND != 'list' ]] && [[ ! -z $COMMAND ]]
+then
+  if [[ $(/usr/bin/id -u) -ne 0 ]]; then
+    sudo $0 $*
+    exit
+  fi
+fi
 
 case $COMMAND in
 'no')
