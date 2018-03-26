@@ -10,6 +10,8 @@ can keep adding entries that aren't managed by procrast). Turning blocking
 on/off for the entire domain list works by commenting and uncommenting the
 entries marked to be managed by procrast.
 
+Original author: @jfarmer
+
 ## Installation
 
 If you are unsure what the `/etc/hosts` file is, you will probably want to make
