@@ -3,7 +3,7 @@
 LISTNAME=$(basename $0)
 
 create_host_line() {
-  echo "$1 $2 # procrast"
+  echo "$1 $2 # $LISTNAME"
 }
 
 print_usage() {
@@ -22,8 +22,8 @@ unblock_list() {
 
 add_host() {
   local HOST=$1
- 
-  if [ "$#" == "1" ];then
+
+  if [ "$#" = "1" ];then
     local IP=127.0.0.1
   else
     local IP=$2
@@ -35,7 +35,7 @@ add_host() {
 remove_host() {
   local HOST=$1
   
-  sed "s/.*$HOST # LISTNAME//g" /etc/hosts > /etc/hosts.new
+  sed "s/.*$HOST # $LISTNAME//g" /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
@@ -47,16 +47,17 @@ dns_reload() {
   killall mDNSResponder
 }
 
-COMMAND=$1
-
 # Raise to sudo privileges for options requiring that
-if [[ $COMMAND != 'list' ]] && [[ ! -z $COMMAND ]]
+if [[ $1 != 'list' ]] && [[ ! -z $1 ]]
 then
   if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     sudo $0 $*
     exit
   fi
 fi
+
+COMMAND=$1
+shift
 
 case $COMMAND in
 'no')
