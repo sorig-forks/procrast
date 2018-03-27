@@ -1,20 +1,22 @@
 #!/bin/sh
 
+LISTNAME=$(basename $0)
+
 create_host_line() {
   echo "$1 $2 # procrast"
 }
 
 print_usage() {
-  echo "Usage: [sudo] $(basename $0) [no|yes|add|remove|list|dns_reload]"
+  echo "Usage: [sudo] $LISTNAME [no|yes|add|remove|list|dns_reload]"
 }
 
-set_procrast_no() {
-  sed -e 's/^#\(.*# procrast\)/\1/g' /etc/hosts > /etc/hosts.new
+block_list() {
+  sed -e 's/^#\(.*# $LISTNAME\)/\1/g' /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
-set_procrast_yes() {
-  sed -e 's/\(^[^\#]*# procrast\)/#\1/g' /etc/hosts > /etc/hosts.new
+unblock_list() {
+  sed -e 's/\(^[^\#]*# $LISTNAME\)/#\1/g' /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
@@ -33,12 +35,12 @@ add_host() {
 remove_host() {
   local HOST=$1
   
-  sed "s/.*$HOST # procrast//g" /etc/hosts > /etc/hosts.new
+  sed "s/.*$HOST # LISTNAME//g" /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
 list() {
-  cat /etc/hosts | grep "# procrast" | cut -d" " -f2
+  cat /etc/hosts | grep "# $LISTNAME" | cut -d" " -f2
 }
 
 dns_reload() {
@@ -58,10 +60,10 @@ fi
 
 case $COMMAND in
 'no')
-  set_procrast_no
+  block_list
   ;;
 'yes')
-  set_procrast_yes
+  unblock_list
   ;;
 'add')
   add_host $*
