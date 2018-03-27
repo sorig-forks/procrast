@@ -70,3 +70,25 @@ DNS cache. A convenience command is available in procrast to do this
 ```
 procrast dns_reload
 ```
+
+## Multiple block lists
+
+The procrast script uses the file name as an identifier to keep track of which
+entries are part of the list among all entries in `/etc/hosts`. You can
+therefore easily create a new, independent list by creating a copy of procrast
+called something else:
+
+```
+cp procrast domainsthattrackme
+```
+
+If the copy is also on your path, you can now start adding domains to the
+new list in the same way you would with the `procrast` list.
+
+```
+domainsthattrackme add google.com
+domainsthattrackme no
+```
+
+**NOTE** that this also means that changing the name of procrast leaves all
+current entries on the list unmanaged by procrast!
