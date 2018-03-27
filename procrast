@@ -11,12 +11,12 @@ print_usage() {
 }
 
 block_list() {
-  sed -e 's/^#\(.*# $LISTNAME\)/\1/g' /etc/hosts > /etc/hosts.new
+  sed -e "s/^#\(.*# $LISTNAME\)/\1/g" /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
 unblock_list() {
-  sed -e 's/\(^[^\#]*# $LISTNAME\)/#\1/g' /etc/hosts > /etc/hosts.new
+  sed -e "s/\(^[^\#]*# $LISTNAME\)/#\1/g" /etc/hosts > /etc/hosts.new
   mv /etc/hosts.new /etc/hosts
 }
 
